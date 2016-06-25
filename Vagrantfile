@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder "./data", "/data"
   config.vm.synced_folder "./notebooks", "/notebooks"
-  
+
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
     vb.memory = "1024"
@@ -28,6 +28,15 @@ Vagrant.configure(2) do |config|
   config.vm.provision "jupyter-conf", type: "file" do |jc|
     jc.source = "./jupyter_notebook_config.py"
     jc.destination = "~/.jupyter/jupyter_notebook_config.py"
+  end
+
+  config.vm.provision "jupyter-daemon", type: "file" do |jda|
+    jda.source = "./daemons/jupyter-notebook.sh"
+    jda.destination = "/tmp/jupyter-notebook.sh"
+  end
+
+  config.vm.provision "install-daemon", type: "shell" do |id|
+    id.path = "./install-daemon.sh"
   end
   
 end
